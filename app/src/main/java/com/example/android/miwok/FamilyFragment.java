@@ -1,22 +1,37 @@
 package com.example.android.miwok;
 
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import static android.R.attr.y;
-import static com.example.android.miwok.R.id.family;
 
-public class FamilyActivity extends AppCompatActivity {
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class FamilyFragment extends Fragment {
+
+
+    public FamilyFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_family);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.activity_family, container, false);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Up navigation (back to previous page.)
+        // ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ArrayList<Word> familym = new ArrayList<Word>();
 
@@ -31,11 +46,13 @@ public class FamilyActivity extends AppCompatActivity {
         familym.add(new Word( "סָבָּא", "grandfather", R.drawable.family_grandfather));
 
 
-        WordAdapter familytListItem = new WordAdapter(this, familym, R.color.category_family);
+        WordAdapter familytListItem = new WordAdapter(getActivity(), familym, R.color.category_family);
 
-        ListView familyList = (ListView) findViewById(R.id.list_family);
+        ListView familyList = (ListView) rootView.findViewById(R.id.list_family);
 
         familyList.setAdapter(familytListItem);
 
+        return rootView;
     }
+
 }

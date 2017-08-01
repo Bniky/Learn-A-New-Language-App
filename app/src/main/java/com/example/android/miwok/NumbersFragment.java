@@ -3,19 +3,23 @@ package com.example.android.miwok;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class NumbersActivity extends AppCompatActivity {
+
+public class NumbersFragment extends Fragment {
 
     private MediaPlayer sound;
     private AudioManager mAu;
@@ -48,18 +52,27 @@ public class NumbersActivity extends AppCompatActivity {
     };
 
     private MediaPlayer.OnCompletionListener mCompleteListener = new MediaPlayer.OnCompletionListener(){
+        @Override
         public void onCompletion(MediaPlayer mp) {
             HelperClass.releaseMediaPlayer(sound, mAu, mAudioManagerL);
         }};
 
+
+    public NumbersFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_numbers);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_numbers, container, false);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        /** TODO: Insert all the code from the NumberActivity’s onCreate() method after the setContentView method call */
 
-        mAu = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        // Up navigation (back to previous page.)
+        // ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mAu = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
 
         final ArrayList<Word> numbers = new ArrayList<Word>();
@@ -87,12 +100,12 @@ public class NumbersActivity extends AppCompatActivity {
 
         //ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(this, R.layout.simple_list_item_1, numbers);
 
-        WordAdapter itemsAdapter = new WordAdapter(this, numbers, R.color.category_numbers);
+        WordAdapter itemsAdapter = new WordAdapter(getActivity(), numbers, R.color.category_numbers);
 
-        ListView listView = (ListView) findViewById(R.id.list_numbers);
+        ListView listView = (ListView) rootView.findViewById(R.id.list_numbers);
 
         listView.setAdapter(itemsAdapter);
-
+        Log.v("NumberFragment", "4");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -108,7 +121,7 @@ public class NumbersActivity extends AppCompatActivity {
 
                     //mAudioManager.requestAudioFocus(mAudioManager, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
-                    sound = MediaPlayer.create(NumbersActivity.this, numbers.get(i).getSoundId());
+                    sound = MediaPlayer.create(getActivity(), numbers.get(i).getSoundId());
                     sound.start();
 
                     sound.setOnCompletionListener(mCompleteListener);
@@ -119,24 +132,24 @@ public class NumbersActivity extends AppCompatActivity {
                 }
             }
         });
+
+        return rootView;
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
-
         HelperClass.releaseMediaPlayer(sound, mAu, mAudioManagerL);
     }
 
-    @Override
+   @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
+                NavUtils.navigateUpFromSameTask(getActivity());
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

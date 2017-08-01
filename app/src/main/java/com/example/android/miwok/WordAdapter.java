@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,6 @@ public class WordAdapter extends ArrayAdapter<Word> {
         // Get the {@link AndroidFlavor} object located at this position in the list
         Word currentAndroidFlavor = getItem(position);
 
-        LinearLayout rr = (LinearLayout) listItemView.findViewById(R.id.li);
         // Find the TextView in the list_item.xml layout with the ID version_name
         TextView nameTextView = (TextView) listItemView.findViewById(R.id.language);
         // Get the version name from the current AndroidFlavor object and
@@ -85,6 +85,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
 
          */
 
+        Log.v("WordAdapter", "" + currentAndroidFlavor);
         ImageView imageView = (ImageView) listItemView.findViewById(R.id.image);
 
         if(currentAndroidFlavor.hasImageResourceId()) {
